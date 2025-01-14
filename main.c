@@ -7,7 +7,7 @@ struct Contact {
 char name[200] ;
 char email_address[50];
 char phone_number[16];
-};// D�claration de  la structure de contact .
+};// Declaration de  la structure de contact .
 
 struct Contact contacts[20];  // contacts[20] une variable  struct contact global .
 
@@ -42,7 +42,7 @@ fclose(fichier);
 }
 int main(){
 int n ;
-printf("Hello workhaledld");
+printf("Hello world");
 return 0 ;
 }
 
