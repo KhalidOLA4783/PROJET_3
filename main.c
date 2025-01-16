@@ -101,10 +101,77 @@ else
         }
     }
 
+
+
+void Modifier_Contact() {
+    char email_modification[50];
+    int found = 0;
+    
+    printf("Entrez l'email du contact à modifier: ");
+    gets(email_modification);  // Demander l'email du contact à modifier
+    
+    FILE *F = fopen("Contacts.txt", "r+");  // Ouvrir le fichier en lecture et écriture
+    if (F == NULL) {
+        printf("Erreur d'ouverture du fichier.\n");
+        return;
+    }
+    
+    FILE *temp = fopen("temp.txt", "w");  // Créer un fichier temporaire pour enregistrer les modifications
+    if (temp == NULL) {
+        printf("Erreur de création du fichier temporaire.\n");
+        fclose(F);
+        return;
+    }
+
+    while (fscanf(F, "%s ; %s ; %s\n", contact.name, contact.email_address, contact.phone_number) != EOF) {
+        if (strcmp(contact.email_address, email_modification) == 0) {
+            found = 1;
+            printf("Contact trouvé! Entrez les nouvelles informations.\n");
+
+            // Modifier le nom
+            printf("Entrez le nouveau nom : ");
+            gets(contact.name);
+
+            // Modifier l'email (optionnel)
+            printf("Entrez le nouveau email : ");
+            gets(contact.email_address);
+            while (verification_des_caracters(contact.email_address) == -1 || strstr(contact.email_address, "@") == NULL || relation_avec_point(contact.email_address) == -1 || strstr(contact.email_address, " ") != NULL || strstr(contact.email_address, ".com") == NULL) {
+                printf("L'email est invalide, essayez encore.\n");
+                printf("Entrez le nouveau email : ");
+                gets(contact.email_address);
+            }
+
+            // Modifier le numéro de téléphone
+            do {
+                printf("Entrez le nouveau numéro de téléphone : ");
+                gets(contact.phone_number);
+            } while (strlen(contact.phone_number) > 10 || strstr(contact.phone_number, " ") != NULL);
+            
+            fprintf(temp, "%s ; %s ; %s\n", contact.name, contact.email_address, contact.phone_number);  // Sauvegarder les modifications dans le fichier temporaire
+        } else {
+            fprintf(temp, "%s ; %s ; %s\n", contact.name, contact.email_address, contact.phone_number);  // Conserver le contact non modifié
+        }
+    }
+
+    if (!found) {
+        printf("Aucun contact trouvé avec cet email.\n");
+    }
+
+    fclose(F);
+    fclose(temp);
+
+    // Remplacer l'ancien fichier par le fichier temporaire
+    remove("Contacts.txt");
+    rename("temp.txt", "Contacts.txt");
+
+    printf("Modification terminée.\n");
+}
+
+
 int main()
 { 
 printf("Hello world");
 Ajouter_Contacts();
+ Modifier_Contact();
 return 0 ;
 }
-
