@@ -1,0 +1,1 @@
+cd "f:\GitHub\PROJET_3\" ; if ($?) { gcc main.c -o main } ; if ($?) { .\main } ; mmmmmmmmmmmmmmmmmmmmmmmmmmmmmm@ds.com ; 47855874 

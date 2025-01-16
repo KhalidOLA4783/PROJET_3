@@ -104,8 +104,45 @@ else
 
 int main()
 { 
-printf("Hello world");
-Ajouter_Contacts();
+  int choix ; char rep[4];
+    printf("Hello world!\n");
+    do
+    {
+       system("cls");
+       printf("********************************MENU*******************************\n");
+       printf("1- Ajouter un nouveau contact.\n");
+       printf("2- Modifier les informations d�un contact existant.\n");
+       printf("3 -Rechercher un contact par son nom.\n");
+       printf("4 -Supprimer un contact de la liste.\n");
+       printf("5- Affichier tout les contacts.\n");
+       printf("6- Quitter. \n \n");
+        printf("\nEntrez Votre choix-------->>>>>\n Choix = ");
+        scanf("%d",&choix);
+        getchar();
+
+    switch(choix)
+    {
+        case 1 : Ajouter_Contacts() ;
+        break;
+        case 2 : Modify();
+        break;
+        case 3 : Recherch();
+        break;
+        case 4 : Delete() ;
+        break;
+        case 5 : Afficher();
+        break;
+        case 6 : break;
+        default :
+        printf("Choix invalide");
+        break;
+    }
+
+    printf("\n\nVouliez vous continuer------>>>>>>\n Reponse : ");
+    scanf("%s",rep);
+    fflush(stdin);
+
+    }while(strcmp(rep,"oui") == 0);
 return 0 ;
 }
 
