@@ -267,6 +267,39 @@ void Afficher()
 
 }
 
+void rechercher_contact(){
+
+    char nom_rechercher[50];
+
+    printf("\n");
+            printf("----------------------Recherche de contact----------------------\n");
+    printf("Entrez le nom du contact a rechercher: ");
+    gets(nom_rechercher);  // Demander le nom du contact à rechercher-
+
+    FILE *F = fopen("Contacts.txt", "r+");  // Ouvrir le fichier en lecture et écriture
+    if (F == NULL) {
+        printf("Erreur d'ouverture du fichier.\n");
+        return;
+    }
+    else
+    {
+     FILE *temp = fopen("temp.txt", "w");  // Créer un fichier temporaire pour enregistrer les modifications
+    if (temp == NULL) {
+        printf("Erreur de creation du fichier temporaire.\n");
+        fclose(F);
+        return;
+    }
+int found = 0;
+ while (fscanf(F, "%s ; %s ; %s\n", contact.name, contact.email_address, contact.phone_number) != EOF) {
+
+        if (strcmp(contact.name, nom_rechercher) == 0) {
+            found = 1;
+    printf("\nVoila les informations du contact :\nNom:%s\n\nContact:\n%s\nEmail :%s",contact.name, contact.phone_number, contact.email_address);
+        }
+}
+ }
+}
+
 int main()
 {
     int choix ; char rep[4];
@@ -292,7 +325,7 @@ int main()
         break;
         case 2 : Modifier_Contact();
         break;
-        case 3 : 
+        case 3 : rechercher_contact();
         break;
         case 4 : Supprimer_Contact() ;
         break;
