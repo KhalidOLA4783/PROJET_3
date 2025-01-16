@@ -294,7 +294,7 @@ int found = 0;
 
         if (strcmp(contact.name, nom_rechercher) == 0) {
             found = 1;
-    printf("\nVoila les informations du contact :\nNom:%s\n\nContact:\n%s\nEmail :%s",contact.name, contact.phone_number, contact.email_address);
+    printf("\nVoila les informations du contact :\nNom:%s\nContact:\n%s\nEmail :%s",contact.name, contact.phone_number, contact.email_address);
         }
 }
  }
