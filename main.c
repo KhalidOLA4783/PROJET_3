@@ -11,6 +11,26 @@ char phone_number[16];
 struct Contacts contact;  // contacts une variable  struct contact global.
 
 /*-------------AJOUTER CONTACT-----------------------------------------*/
+char relation_avec_numero_de_telephone_isalpha(char phone_number[55])
+{
+int i ;
+int n = 0;
+for(i = 0 ; i<strlen(phone_number) ; i++)
+{
+    if(isalpha(phone_number[i])){
+        n++;
+    }
+}
+if(n == 0)
+{
+    return 1 ;
+}
+else
+{
+    return -1 ;
+}
+}
+
 char relation_avec_point(char email_address[50])
 {
 int pos1 , pos2 ;
@@ -69,6 +89,7 @@ else
 
  void Ajouter_Contacts()
      {
+        char reponse[4];
          FILE *F ;
          F = fopen("Contacts.txt","a");//Mode de lecture.
          fflush(stdin);
@@ -91,14 +112,24 @@ else
             printf("\nEnter again your e-mail -->>>>>\n Email : ");
             gets(contact.email_address);
             }
-            printf("/n");
             fflush(stdin);
             do{
             printf("\nEntrez votre numero ------>>>>\n Number : ");
             gets(contact.phone_number);
-              }  while( strlen(contact.phone_number) >10 || strstr(contact.phone_number , " ") !=NULL);
+              }  while( strlen(contact.phone_number) >10 || strstr(contact.phone_number , " ") !=NULL || relation_avec_numero_de_telephone_isalpha(contact.phone_number) == -1);
             fflush(stdin);
-            fprintf(F,"%s ; %s ; %s \n",contact.name,contact.email_address,contact.phone_number);
+            printf("\n\nVoulez vous enregistrer le contact------>>>>>>\n Reponse : ");
+            scanf("%s",reponse);
+            if(strcmp(reponse,"oui")==0)
+            {
+                fprintf(F,"%s ; %s ; %s \n",contact.name,contact.email_address,contact.phone_number);
+                printf("Contact enregistre avec succes.\n");
+            }
+            else
+            {
+                printf("Contact non enregistre.\n");
+            }
+            
             fclose(F);
         }
     }
@@ -208,22 +239,76 @@ void Supprimer_Contact() {
     remove("Contacts.txt");
     rename("temp.txt", "Contacts.txt");
 
-    printf("Suppression terminee.\n");
+}
+
+void Afficher()
+{
+    FILE *F ;
+    F = fopen("Contacts.txt","r");
+     if ( F  == NULL)
+        {
+        printf("Erreur d'ouverture du fichier.\n");
+        }
+    else
+        {
+          printf("\n La liste des contact est :\n\n");
+    printf("Name \t\t Email adress \t\t Phone Number \n");
+    do
+    {
+      fscanf(F,"%s ;%s ;%s \n",contact.name,contact.email_address,contact.phone_number);
+      fflush(stdin);
+      printf("%s\t\t",contact.name);
+      printf("%s\t\t  ",contact.email_address);
+      printf("%s\t\t\n",contact.phone_number);
+      printf("\n");
+    }while(!feof(F));
+    fclose(F);
+        }
+
 }
 
 int main()
-{ 
-printf("Hello world");
-Ajouter_Contacts();
-return 0 ;
-}
-int m;
-printf("Voulez-vous effectuer une autre opération ?: \n");
- printf("1: Oui.\n");
-printf("2: Non.\n");
-scanf("%d",&m);
-    while(m<1 ||m>2){
-     printf("Entree invalide\n Voulez vous supprimer ce contact? ");
-     scanf("%d",&m);
+{
+    int choix ; char rep[4];
+    printf("Hello world!\n");
+    do
+    {
+       system("cls");
+       printf("********************************MENU*******************************\n");
+       printf("1- Ajouter un nouveau contact.\n");
+       printf("2- Modifier les informations d�un contact existant.\n");
+       printf("3 -Rechercher un contact par son nom.\n");
+       printf("4 -Supprimer un contact de la liste.\n");
+       printf("5- Affichier tout les contacts.\n");
+       printf("6- Quitter. \n \n");
+
+        printf("\nEntrez Votre choix-------->>>>>\n Choix = ");
+        scanf("%d",&choix);
+        getchar();
+
+    switch(choix)
+    {
+        case 1 : Ajouter_Contacts() ;
+        break;
+        case 2 : Modifier_Contact();
+        break;
+        case 3 : 
+        break;
+        case 4 : Supprimer_Contact() ;
+        break;
+        case 5 : Afficher();
+        break;
+        case 6 : break;
+        default :
+        printf("Choix invalide");
+        break;
     }
- }
+
+    printf("\n\nVouliez vous continuer------>>>>>>\n Reponse : ");
+    scanf("%s",rep);
+    getchar();
+
+    }while(strcmp(rep,"oui") == 0);
+
+    return 0;
+}
