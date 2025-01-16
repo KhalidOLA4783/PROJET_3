@@ -54,7 +54,7 @@ else
 int n;
 for(int i = 0 ; i<strlen(email_address) ; i++)
 {
-    if( email_address[i] =='.' || email_address[i] == '_' || email_address[i]== '-' || email_address[i] == '@'  || isalnum(email_address[i]) )
+    if(isalnum(email_address[i])|| email_address[i] =='.' || email_address[i] == '_' || email_address[i]== '-' || email_address[i] == '@')
     {
         n++ ;
     }
@@ -79,11 +79,11 @@ else
         {
             printf("\n");
             printf("----------------------Ajout de contact----------------------\n");
-            printf("\nEnter youre name---->>>>>>>>\n Name: ");
+            printf("\nEntrez votre nom---->>>>>>>>\n Name: ");
             gets(contact.name);
             fflush(stdin);
             printf("\n") ;
-            printf("Enter youre email ---->>>>>>>>>\n Email : ");
+            printf("Entrez votre email ---->>>>>>>>>\n Email : ");
             gets(contact.email_address);
             while(verification_des_caracters(contact.email_address) == -1 || strstr(contact.email_address, "@") == NULL || relation_avec_point(contact.email_address)== -1 || strstr(contact.email_address , " ") !=NULL  || strstr(contact.email_address,".com")==NULL)
             {
@@ -91,9 +91,10 @@ else
             printf("\nEnter again your e-mail -->>>>>\n Email : ");
             gets(contact.email_address);
             }
+            printf("/n");
             fflush(stdin);
             do{
-            printf("\nEnter your Number ------>>>>\n Number : ");
+            printf("\nEntrez votre numero ------>>>>\n Number : ");
             gets(contact.phone_number);
               }  while( strlen(contact.phone_number) >10 || strstr(contact.phone_number , " ") !=NULL);
             fflush(stdin);
@@ -127,24 +128,24 @@ void Modifier_Contact() {
     while (fscanf(F, "%s ; %s ; %s\n", contact.name, contact.email_address, contact.phone_number) != EOF) {
         if (strcmp(contact.email_address, email_modification) == 0) {
             found = 1;
-            printf("Contact trouvé! Entrez les nouvelles informations.\n");
+            printf("Contact trouvee! Entrez les nouvelles informations.\n");
 
             // Modifier le nom
-            printf("Entrez le nouveau nom : ");
+            printf("\nEntrez le nouveau nom---->>>>>>>>\n Name: ");
             gets(contact.name);
 
             // Modifier l'email (optionnel)
-            printf("Entrez le nouveau email : ");
+             printf("Entrez le nouveau email ---->>>>>>>>>\n Email : ");
             gets(contact.email_address);
             while (verification_des_caracters(contact.email_address) == -1 || strstr(contact.email_address, "@") == NULL || relation_avec_point(contact.email_address) == -1 || strstr(contact.email_address, " ") != NULL || strstr(contact.email_address, ".com") == NULL) {
-                printf("L'email est invalide, essayez encore.\n");
-                printf("Entrez le nouveau email : ");
-                gets(contact.email_address);
+                printf("L'email est invalide, try again.\n");
+                 printf("Entrez le nouveau email ---->>>>>>>>>\n Email : ");
+                 gets(contact.email_address);
             }
 
             // Modifier le numéro de téléphone
             do {
-                printf("Entrez le nouveau numéro de téléphone : ");
+                printf("\nEntrez le nouveau numero ------>>>>\n Number : ");
                 gets(contact.phone_number);
             } while (strlen(contact.phone_number) > 10 || strstr(contact.phone_number, " ") != NULL);
             
@@ -155,7 +156,7 @@ void Modifier_Contact() {
     }
 
     if (!found) {
-        printf("Aucun contact trouvé avec cet email.\n");
+        printf("Aucun contact trouve avec cet email.\n");
     }
 
     fclose(F);
@@ -165,14 +166,99 @@ void Modifier_Contact() {
     remove("Contacts.txt");
     rename("temp.txt", "Contacts.txt");
 
-    printf("Modification terminée.\n");
+    printf("Modification terminee.\n");
 }
+void Supprimer_Contact() {
+    char email_suppression[50];
+    int found = 0;
 
+    printf("Entrez l'email du contact a supprimer: ");
+    gets(email_suppression);  // Demander l'email du contact à supprimer
+
+    FILE *F = fopen("Contacts.txt", "r");  // Ouvrir le fichier en lecture
+    if (F == NULL) {
+        printf("Erreur d'ouverture du fichier.\n");
+        return;
+    }
+
+    FILE *temp = fopen("temp.txt", "w");  // Créer un fichier temporaire pour enregistrer les contacts restants
+    if (temp == NULL) {
+        printf("Erreur de creation du fichier temporaire.\n");
+        fclose(F);
+        return;
+    }
+
+    while (fscanf(F, "%s ; %s ; %s\n", contact.name, contact.email_address, contact.phone_number) != EOF) {
+        if (strcmp(contact.email_address, email_suppression) == 0) {
+            found = 1;
+            printf("Contact trouvee et supprimee.\n");
+        } else {
+            fprintf(temp, "%s ; %s ; %s\n", contact.name, contact.email_address, contact.phone_number);
+        }
+    }
+
+    if (!found) {
+        printf("Aucun contact trouvee avec cet email.\n");
+    }
+
+    fclose(F);
+    fclose(temp);
+
+    // Remplacer l'ancien fichier par le fichier temporaire
+    remove("Contacts.txt");
+    rename("temp.txt", "Contacts.txt");
+
+    printf("Suppression terminee.\n");
+}
 
 int main()
-{ 
-printf("Hello world");
-Ajouter_Contacts();
- Modifier_Contact();
-return 0 ;
+{
+int Menu;
+printf("hello\n==Menu==\n");
+printf("1: Ajouter un contact.\n");
+printf("2:Modifier contact.\n");
+printf("3:Rechercher un contact.\n");
+printf("4:Supprimer un contact.\n");
+printf("5:Sauvegarder et charger les contacts\n");
+printf("veuillez entrer l'operation a effetue\n");
+scanf("%d",&Menu);
+
+while (Menu < 1 || Menu > 5)
+{
+    printf("Error\n");
+    printf("veuillez entrer l'operation a effectue\n");
+    scanf("%d",&Menu);
 }
+switch (Menu)
+{
+case 1:
+    printf("Ajouter un contact.\n");
+    Ajouter_Contacts();
+    break;
+case 2:
+    printf("Modifier contact.\n");
+    Modifier_Contact();
+    break;
+case 3:
+    printf("Rechercher un contact.\n");
+    break;
+case 4:
+    printf("Supprimer un contact.\n");
+    SupprimerContact();
+    break;
+case 5:
+    printf("Sauvegarder et charger les contacts\n");
+    break;
+default:printf("Erreur \n veuillez entrer l'operation\n");
+    break;
+}
+int m;
+printf("Voulez-vous effectuer une autre opération ?: \n");
+ printf("1: Oui.\n");
+printf("2: Non.\n");
+scanf("%d",&m);
+    while(m<1 ||m>2){
+     printf("Entree invalide\n Voulez vous supprimer ce contact? ");
+     scanf("%d",&m);
+    }
+ }
